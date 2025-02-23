@@ -29,13 +29,22 @@ dependencies:
 ### Steps
 - Setup Hive
 
-    Initialize Hive in your main.dart:
+    Initialize Hive:
+	```dart
+		class FlutterPersistentTheme {
+		FlutterPersistentTheme();
+
+		static Future<dynamic> init() async {
+			final dir = await getApplicationDocumentsDirectory();
+			await Hive.initFlutter(dir.path);
+		}
+	}
+	```
+	Call the initialize in the `main.dart` file:
     ```dart
     void main() async {
-	    WidgetsFlutterBinding.ensureInitialized();
-	    await Hive.initFlutter();
-	    var box = await Hive.openBox('settings');
-	    runApp(MyApp(box: box));
+	  WidgetsFlutterBinding.ensureInitialized();
+  	  await FlutterPersistentTheme.init();
     }
     ```
 
