@@ -1,0 +1,32 @@
+name: flutter_persistent_theme
+description: "A simple and efficient Flutter app that enables theme switching (light/dark mode) and persists the selected theme even after the app is closed."
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.4
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  hive: ^2.0.5
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.5
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^2.6.1
+  get: ^4.7.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+
+flutter:
+
+  uses-material-design: true
+
+
