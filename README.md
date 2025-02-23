@@ -34,10 +34,10 @@ dependencies:
     Initialize Hive in your main.dart:
     ```dart
     void main() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Hive.initFlutter();
-    var box = await Hive.openBox('settings');
-    runApp(MyApp(box: box));
+         WidgetsFlutterBinding.ensureInitialized();
+        await Hive.initFlutter();
+        var box = await Hive.openBox('settings');
+        runApp(MyApp(box: box));
     }
     ```
 
@@ -45,73 +45,73 @@ dependencies:
 
     Create a ThemeProvider to manage theme changes:
     ```dart
-        final isDarkThemeProvider = StateProvider<bool>((ref) => false);
+    final isDarkThemeProvider = StateProvider<bool>((ref) => false);
     ```
 
 - Create a theme class to initialize and update the `isDarkThemeProvider` with the value stored in hive
 
     ```dart
     class ThemeClass extends ConsumerStatefulWidget {
-    const ThemeClass({super.key, required this.child});
+        const ThemeClass({super.key, required this.child});
 
-    final Widget child;
+        final Widget child;
 
-    @override
-    ConsumerState<ThemeClass> createState() => _ThemeClassState();
+        @override
+        ConsumerState<ThemeClass> createState() => _ThemeClassState();
     }
 
     class _ThemeClassState extends ConsumerState<ThemeClass> {
-    bool initialized = false;
-    late Box<dynamic> themeBox;
+        bool initialized = false;
+        late Box<dynamic> themeBox;
 
-    @override
-    void initState() {
-        super.initState();
-        initTheme();
-    }
-
-    void initTheme() async {
-        try {
-        themeBox = await Hive.openBox('theme');
-        bool? isDarkTheme = themeBox.get('theme');
-
-        if (isDarkTheme == null) {
-            initPersistentTheme();
-        } else {
-            loadPersistentTheme(isDarkTheme);
-        }
-        } catch (e) {
-        initPersistentTheme();
+        @override
+        void initState() {
+            super.initState();
+            initTheme();
         }
 
-        initialized = true;
-        setState(() {});
-    }
+        void initTheme() async {
+            try {
+                themeBox = await Hive.openBox('theme');
+                bool? isDarkTheme = themeBox.get('theme');
 
-    initPersistentTheme() async {
-        var box = Hive.box('theme');
-        box.put('theme', false);
-    }
+                if (isDarkTheme == null) {
+                    initPersistentTheme();
+                } else {
+                    loadPersistentTheme(isDarkTheme);
+                }
+            } catch (e) {
+                initPersistentTheme();
+            }
 
-    loadPersistentTheme(bool isDarkTheme) async {
-        ref.read(isDarkThemeProvider.notifier).update((state) => isDarkTheme);
-    }
+            initialized = true;
+            setState(() {});
+        }
 
-    @override
-    Widget build(BuildContext context) {
-        return initialized == false ? const SizedBox() : widget.child;
-    }
+        initPersistentTheme() async {
+            var box = Hive.box('theme');
+            box.put('theme', false);
+        }
+
+        loadPersistentTheme(bool isDarkTheme) async {
+            ref.read(isDarkThemeProvider.notifier).update((state) => isDarkTheme);
+        }
+
+        @override
+        Widget build(BuildContext context) {
+            return initialized == false ? const SizedBox() : widget.child;
+        }
     }
     ```
 
 - Create a handler function to store the `isDarkThemeProvider` value into Hive
     ```dart
     toggleTheme(bool value) async {
-    final themeBox = await Hive.box('theme');
-    bool? isDarkTheme = themeBox.get('theme');
-    if (isDarkTheme != null) {
-        themeBox.put('theme', value);
-    }
+        final themeBox = await Hive.box('theme');
+        bool? isDarkTheme = themeBox.get('theme');
+        if (isDarkTheme != null) {
+            themeBox.put('theme', value);
+        }
     }
     ```
 
@@ -119,14 +119,14 @@ dependencies:
     ```dart
         Widget build(BuildContext context) {
             return ThemeClass(
-                child: GetMaterialApp(
-                title: 'Flutter Persistent Theme',
-                theme: ref.watch(themeProvider),
-                darkTheme: ref.watch(themeProvider),
-                home: const FlutterPersistentThemePage(),
-        ),
-        );
-    }
+                    child: GetMaterialApp(
+                    title: 'Flutter Persistent Theme',
+                    theme: ref.watch(themeProvider),
+                    darkTheme: ref.watch(themeProvider),
+                    home: const FlutterPersistentThemePage(),
+                    ),
+            );
+        }
     ```
 - Use the provider in your UI:
     ```dart
